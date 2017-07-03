@@ -105,7 +105,8 @@
           snap: true,
           snapLoop: this.loop,
           snapThreshold: 0.3,
-          snapSpeed: 400
+          snapSpeed: 400,
+          probeType: 3
         })
 
         this.slider.on('scrollEnd', this._onScrollEnd)

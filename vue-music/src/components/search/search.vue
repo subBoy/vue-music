@@ -1,10 +1,14 @@
 <template>
-
+  <swiper-view></swiper-view>
 </template>
 
 <script>
-  export default {
+  import swiperView from 'base/swiper/swiper'
 
+  export default {
+    components: {
+      swiperView
+    }
   }
 </script>
 

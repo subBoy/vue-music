@@ -25,17 +25,21 @@
       }
     },
     created () {
-      this._swiper()
+      setTimeout(() => {
+        this._swiper()
+      }, 20)
     },
     methods: {
       _swiper () {
-        this.mySwiper = new Swiper('.swiper-container',{
+        this.mySwiper = new Swiper('.swiper-container', {
+          loop: true,
           slidesPerView: 'auto',
           centeredSlides: !0,
           watchSlidesProgress: !0,
           pagination: '.swiper-pagination',
           paginationClickable: !0,
           paginationBulletRender: function(a, b) {
+            let name = ''
             switch (a) {
               case 0:
                 name = '洗'
@@ -61,19 +65,21 @@
             return '<span class="' + b + '"><i>' + name + '</i></span>'
           },
           onProgress: function(a) {
-            var b, c, d
+            var b, c, d, scale, es
             for (b = 0; b < a.slides.length; b++) {
-              c = a.slides[b],
-              d = c.progress,
-              scale = 1 - Math.min(Math.abs(.2 * d), 1),
-              es = c.style,
-              es.opacity = 1 - Math.min(Math.abs(d / 2), 1),
+              c = a.slides[b]
+              d = c.progress
+              scale = 1 - Math.min(Math.abs(0.2 * d), 1)
+              es = c.style
+              es.opacity = 1 - Math.min(Math.abs(d / 2), 1)
               es.webkitTransform = es.MsTransform = es.msTransform = es.MozTransform = es.OTransform = es.transform = 'translate3d(0px, 0,' + -Math.abs(150 * d) + 'px)'
+              es.webkitTransform = 'scale(' + scale + ')'
+              es.transform = 'scale(' + scale + ')'
             }
           },
           onSetTransition: function(a, b) {
             for (let c = 0; c < a.slides.length; c++) {
-              let es = a.slides[c].style,
+              let es = a.slides[c].style
               es.webkitTransitionDuration = es.MsTransitionDuration = es.msTransitionDuration = es.MozTransitionDuration = es.OTransitionDuration = es.transitionDuration = b + 'ms'
             }
           }
@@ -104,13 +110,13 @@
   .swiper-wrapper
     margin-top: 10px
   .swiper-slide
-    width: 80%
+    width: 60%
     -webkit-transform-style: preserve-3d
     -moz-transform-style: preserve-3d
     -ms-transform-style: preserve-3d
     transform-style: preserve-3d
   .swiper-slide .main-img
-    width: 80%
+    width: 90%
     margin: 0 auto
     display: block
   #pagination

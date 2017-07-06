@@ -11,7 +11,7 @@ Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
 
-export default new Vuex.State({
+export default new Vuex.Store({
   actions,
   getters,
   state,

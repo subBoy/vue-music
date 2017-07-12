@@ -14,7 +14,8 @@
       <div class="filter" ref="filter"></div>
     </div>
     <div class="bg-layer" ref="layer"></div>
-    <scroll class="list" ref="list" :data="songs" :probeType="probeType" :listenScroll="listenScroll" @scroll="scroll">
+    <song-list :songs="songs" @select="selectItem"></song-list>
+    <scroll class="list" ref="list" :data="songs" :probe-type="probeType" :listen-scroll="listenScroll" @scroll="scroll">
       <div class="song-list-wrapper">
         <song-list :songs="songs" @select="selectItem"></song-list>
       </div>
@@ -31,7 +32,7 @@
   import SongList from 'base/song-list/song-list'
   import {prefixStyle} from 'common/js/dom'
   // import {playlistMixin} from 'common/js/mixin'
-  // import {mapActions} from 'vuex'
+  import {mapActions} from 'vuex'
 
   const RESERVED_HEIGHT = 40
   const transform = prefixStyle('transform')
@@ -69,8 +70,14 @@
         this.$router.back()
       },
       selectItem (item, index) {
-
-      }
+        this.selectPlay({
+          list: this.songs,
+          index
+        })
+      },
+      ...mapActions([
+        'selectPlay'
+      ])
     },
     computed: {
       bgStyle () {

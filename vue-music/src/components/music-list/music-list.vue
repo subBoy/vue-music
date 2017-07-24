@@ -1,5 +1,5 @@
 <template>
-  <div class="music-list">
+  <div class="music-list" ref="musicList">
     <div class="back">
       <i class="icon-back" @click="back"></i>
     </div>
@@ -16,7 +16,7 @@
     <div class="bg-layer" ref="layer"></div>
     <scroll class="list" ref="list" :data="songs" :probe-type="probeType" :listen-scroll="listenScroll" @scroll="scroll">
       <div class="song-list-wrapper">
-        <song-list :songs="songs" @select="selectItem"></song-list>
+        <song-list :rank="rank" :songs="songs" @select="selectItem"></song-list>
       </div>
       <div class="loading-container" v-show="!songs.length">
         <loading></loading>
@@ -30,7 +30,7 @@
   import Loading from 'base/loading/loading'
   import SongList from 'base/song-list/song-list'
   import {prefixStyle} from 'common/js/dom'
-  // import {playlistMixin} from 'common/js/mixin'
+  import {playListMixin} from 'common/js/mixin'
   import {mapActions} from 'vuex'
 
   const RESERVED_HEIGHT = 40
@@ -38,6 +38,7 @@
   const backdrop = prefixStyle('backdrop-filter')
 
   export default {
+    mixins: [playListMixin],
     props: {
       bgImage: {
         type: String,
@@ -50,6 +51,10 @@
       title: {
         type: String,
         default: ''
+      },
+      rank: {
+        type: Boolean,
+        default: false
       }
     },
     data () {
@@ -62,6 +67,11 @@
       this.listenScroll = true
     },
     methods: {
+      handlePlaylist (playlist) {
+        const bottom = playlist.length > 0 ? '60px' : ''
+        this.$refs.musicList.style.bottom = bottom
+        this.$refs.list.refresh()
+      },
       scroll (pos) {
         this.scrollY = pos.y
       },
@@ -158,13 +168,13 @@
     .title
       position: absolute
       top: 0
-      left: 10%
+      left: 12%
       z-index: 40
-      width: 80%
+      width: 76%
       no-wrap()
       text-align: center
-      line-height: 40px
-      font-size: $font-size-large
+      line-height: 44px
+      font-size: $font-size-medium-x
       color: $color-text
     .bg-image
       position: relative

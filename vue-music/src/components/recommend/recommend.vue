@@ -1,5 +1,5 @@
 <template>
-  <div class="recommend">
+  <div class="recommend" ref="recommend">
     <scroll class="recommend-content" ref="scroll" :data="disclist">
       <div>
         <div v-if="recommends.length" class="slider-wrapper">
@@ -16,7 +16,7 @@
         <div class="recommend-list">
           <h1 class="list-title">热门歌单推荐</h1>
           <ul>
-            <li class="item" v-for="item in disclist">
+            <li class="item" v-for="item in disclist" @click="selectItem(item)">
               <div class="icon">
                 <img width="60" height="60" v-lazy="item.imgurl">
               </div>
@@ -32,6 +32,7 @@
         <loading></loading>
       </div>
     </scroll>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -40,9 +41,12 @@
   import Scroll from 'base/scroll/scroll'
   import Slider from 'base/slider/slider'
   import {getRecommend, getDiscList} from 'api/recommend'
+  import {playListMixin} from 'common/js/mixin'
   import {ERR_OK} from 'api/config'
+  import {mapMutations} from 'vuex'
 
   export default {
+    mixins: [playListMixin],
     data () {
       return {
         recommends: [],
@@ -55,6 +59,23 @@
       this._getDiscList()
     },
     methods: {
+      handlePlaylist (playlist) {
+        const bottom = playlist.length > 0 ? '60px' : ''
+        this.$refs.recommend.style.bottom = bottom
+        this.$refs.scroll.refresh()
+      },
+      loadImage () {
+        if (!this.checkLoaded) {
+          this.$refs.scroll.refresh()
+          this.checkLoaded = true
+        }
+      },
+      selectItem (item) {
+        this.$router.push({
+          path: `/recommend/${item.dissid}`
+        })
+        this.setRadio(item)
+      },
       _getRecommend () {
         getRecommend().then((res) => {
           if (res.code === ERR_OK) {
@@ -69,12 +90,9 @@
           }
         })
       },
-      loadImage () {
-        if (!this.checkLoaded) {
-          this.$refs.scroll.refresh()
-          this.checkLoaded = true
-        }
-      }
+      ...mapMutations({
+        setRadio: 'SET_RADIO'
+      })
     },
     components: {
       Slider,

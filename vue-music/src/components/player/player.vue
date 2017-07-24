@@ -583,7 +583,7 @@
               font-size: $font-size-medium
       .bottom
         position: absolute
-        bottom: 50px
+        bottom: 20px
         width: 100%
         .dot-wrapper
           text-align: center
